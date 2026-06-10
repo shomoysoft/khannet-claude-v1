@@ -1,0 +1,16 @@
+{
+    "name": "khannet/website",
+    "description": "KhanNet ISP Website",
+    "autoload": {
+        "psr-4": {
+            "App\\": "framework/",
+            "KhanNet\\": "app/"
+        },
+        "files": [
+            "framework/Support/helpers.php"
+        ]
+    },
+    "require": {
+        "php": ">=8.0"
+    }
+}

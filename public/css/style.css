@@ -901,6 +901,136 @@ button, input, select, textarea { font: inherit; }
 
 .form-success p { color: var(--gray-600); }
 
+/* ── Custom Select Dropdown ── */
+.custom-select-wrapper {
+  position: relative;
+}
+
+.custom-select-wrapper select {
+  display: none;
+}
+
+.custom-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: .75rem 1rem;
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  font-size: .95rem;
+  color: var(--gray-800);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  font-family: inherit;
+  outline: none;
+  gap: .5rem;
+  line-height: 1.4;
+}
+
+.custom-select-trigger:hover,
+.custom-select-trigger:focus {
+  border-color: var(--blue-700);
+  box-shadow: 0 0 0 3px rgba(0,119,182,.12);
+}
+
+.custom-select-wrapper.open .custom-select-trigger {
+  border-color: var(--blue-700);
+  box-shadow: 0 0 0 3px rgba(0,119,182,.12);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.custom-select-value {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-select-value.placeholder {
+  color: var(--gray-400);
+}
+
+.custom-select-arrow {
+  color: var(--gray-400);
+  font-size: .75rem;
+  flex-shrink: 0;
+  transition: transform .2s ease;
+  margin-left: .25rem;
+}
+
+.custom-select-wrapper.open .custom-select-arrow {
+  transform: rotate(180deg);
+  color: var(--blue-700);
+}
+
+.custom-select-panel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 1.5px solid var(--blue-700);
+  border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 300;
+  max-height: 260px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-300) transparent;
+}
+
+.custom-select-wrapper.open .custom-select-panel {
+  display: block;
+  animation: csSelectIn .13s ease;
+}
+
+@keyframes csSelectIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.custom-select-group-label {
+  padding: .55rem 1rem .3rem;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-100);
+  position: sticky;
+  top: 0;
+}
+
+.custom-select-option {
+  padding: .625rem 1rem;
+  font-size: .92rem;
+  color: var(--gray-700);
+  cursor: pointer;
+  transition: background .1s, color .1s;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.custom-select-option:last-child {
+  border-bottom: none;
+}
+
+.custom-select-option:hover {
+  background: var(--blue-50);
+  color: var(--blue-800);
+}
+
+.custom-select-option.selected {
+  background: var(--teal-50);
+  color: var(--teal-700);
+  font-weight: 600;
+}
+
 /* ── FAQ Accordion ── */
 .faq-list { max-width: 780px; margin-inline: auto; }
 
@@ -1350,3 +1480,229 @@ body { padding-bottom: 72px; } /* space for float-cta on mobile */
 .breadcrumb a { color: rgba(255,255,255,.65); transition: var(--transition); }
 .breadcrumb a:hover { color: var(--white); }
 .breadcrumb .sep { opacity: .5; }
+
+/* ============================================================
+   Shomoysoft — Purple/Violet Brand Layer
+   ============================================================ */
+:root {
+  --shomoy-900: #2e1065;
+  --shomoy-800: #3b0764;
+  --shomoy-700: #6d28d9;
+  --shomoy-500: #8b5cf6;
+  --shomoy-400: #a78bfa;
+  --shomoy-200: #ddd6fe;
+  --shomoy-50:  #f5f3ff;
+}
+
+.shomoy-hero {
+  background: linear-gradient(135deg, var(--shomoy-900) 0%, var(--shomoy-800) 50%, var(--shomoy-700) 100%);
+  color: var(--white);
+  padding: 5rem 0 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.shomoy-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 80% 40%, rgba(139,92,246,.3) 0%, transparent 55%),
+    radial-gradient(ellipse at 15% 80%, rgba(109,40,217,.2) 0%, transparent 50%);
+}
+
+.shomoy-badge {
+  display: inline-block;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--shomoy-400);
+  background: rgba(139,92,246,.15);
+  border: 1px solid rgba(139,92,246,.3);
+  padding: .25rem .875rem;
+  border-radius: 99px;
+  margin-bottom: .875rem;
+}
+
+/* Service category cards */
+.shomoy-card {
+  background: var(--white);
+  border: 1.5px solid var(--shomoy-200);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  transition: var(--transition);
+}
+
+.shomoy-card:hover {
+  border-color: var(--shomoy-500);
+  box-shadow: 0 8px 32px rgba(139,92,246,.15);
+  transform: translateY(-4px);
+}
+
+.shomoy-card-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--shomoy-700), var(--shomoy-500));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+
+.shomoy-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: .5rem;
+}
+
+.shomoy-card > p {
+  font-size: .9rem;
+  color: var(--gray-600);
+  line-height: 1.65;
+  margin-bottom: 1.25rem;
+}
+
+/* Sub-service tags inside a card */
+.shomoy-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.shomoy-tag {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--shomoy-700);
+  background: var(--shomoy-50);
+  border: 1px solid var(--shomoy-200);
+  padding: .25rem .75rem;
+  border-radius: 99px;
+}
+
+/* Rural-friendly "simple" service cards */
+.shomoy-simple-card {
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-top: 4px solid var(--shomoy-500);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  transition: var(--transition);
+  text-align: center;
+}
+
+.shomoy-simple-card:hover {
+  border-color: var(--shomoy-500);
+  border-top-color: var(--shomoy-700);
+  box-shadow: 0 8px 32px rgba(139,92,246,.12);
+  transform: translateY(-4px);
+}
+
+.shomoy-simple-card .service-emoji {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.shomoy-simple-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: .5rem;
+}
+
+.shomoy-simple-card p {
+  font-size: .875rem;
+  color: var(--gray-600);
+  line-height: 1.65;
+  margin-bottom: 1.25rem;
+}
+
+.shomoy-simple-card .btn { width: 100%; justify-content: center; }
+
+/* Teaser section on homepage */
+.shomoy-teaser {
+  background: linear-gradient(135deg, var(--shomoy-900) 0%, #1e1b4b 100%);
+  padding: 5rem 0;
+  color: var(--white);
+}
+
+.shomoy-teaser-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+
+.shomoy-teaser-card {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(139,92,246,.25);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  transition: var(--transition);
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.shomoy-teaser-card:hover {
+  background: rgba(255,255,255,.1);
+  border-color: var(--shomoy-400);
+  transform: translateY(-2px);
+}
+
+.shomoy-teaser-card .t-icon {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+  margin-top: .1rem;
+}
+
+.shomoy-teaser-card h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: .3rem;
+}
+
+.shomoy-teaser-card p {
+  font-size: .875rem;
+  color: rgba(255,255,255,.7);
+  line-height: 1.6;
+}
+
+/* Divider with label */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin: 3.5rem 0 2.5rem;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--gray-200);
+}
+
+.section-divider span {
+  font-size: .8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--gray-400);
+  white-space: nowrap;
+}
+
+/* Responsive */
+@media (min-width: 640px) {
+  .shomoy-teaser-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .shomoy-teaser-grid { grid-template-columns: repeat(4, 1fr); }
+}
