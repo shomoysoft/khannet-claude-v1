@@ -14,16 +14,16 @@
         <input type="text" name="search" placeholder="Name, mobile or service…" value="<?= e($search) ?>">
         <select name="status">
           <option value="">All statuses</option>
-          <?php foreach (['new','contacted','completed','cancelled'] as $s): ?>
+          <?php foreach (\KhanNet\Models\Quote::STATUSES as $s): ?>
           <option value="<?= $s ?>" <?= $status === $s ? 'selected' : '' ?>><?= ucfirst($s) ?></option>
           <?php endforeach; ?>
         </select>
         <button type="submit" class="btn btn-outline btn-sm">Filter</button>
         <?php if ($search || $status): ?>
-        <a href="quotes.php" class="btn btn-outline btn-sm">Clear</a>
+        <a href="/admin/quotes" class="btn btn-outline btn-sm">Clear</a>
         <?php endif; ?>
       </form>
-      <a href="export.php?type=quotes" class="btn btn-outline btn-sm">⬇ CSV</a>
+      <a href="/admin/quotes/export" class="btn btn-outline btn-sm">⬇ CSV</a>
     </div>
   </div>
 
@@ -59,12 +59,11 @@
               <div><div class="detail-label">Received</div><div class="detail-val"><?= date('d M Y, H:i', strtotime($r['created_at'])) ?></div></div>
               <div><div class="detail-label">IP</div><div class="detail-val"><?= e($r['ip'] ?: '—') ?></div></div>
             </div>
-            <form method="POST" action="update-status.php" class="action-row">
+            <form method="POST" action="/admin/quotes" class="action-row">
               <?= csrf_field() ?>
-              <input type="hidden" name="type"  value="quote">
-              <input type="hidden" name="id"    value="<?= (int)$r['id'] ?>">
+              <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
               <select name="status" class="status-sel">
-                <?php foreach (['new','contacted','completed','cancelled'] as $s): ?>
+                <?php foreach (\KhanNet\Models\Quote::STATUSES as $s): ?>
                 <option value="<?= $s ?>" <?= $r['status']===$s ? 'selected':'' ?>><?= ucfirst($s) ?></option>
                 <?php endforeach; ?>
               </select>
@@ -84,7 +83,7 @@
     <?php for ($p = 1; $p <= $pages; $p++): ?>
     <?php $q = http_build_query(['status' => $status, 'search' => $search, 'page' => $p]); ?>
     <?php if ($p === $page): ?><span class="cur"><?= $p ?></span>
-    <?php else: ?><a href="quotes.php?<?= $q ?>"><?= $p ?></a><?php endif; ?>
+    <?php else: ?><a href="/admin/quotes?<?= $q ?>"><?= $p ?></a><?php endif; ?>
     <?php endfor; ?>
   </div>
   <?php endif; ?>

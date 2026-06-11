@@ -12,7 +12,7 @@ function layout_start(string $title, string $active): void
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= e($title) ?> — KhanNet Admin</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/assets/css/admin.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
 </head>
 <body>
@@ -25,20 +25,20 @@ function layout_start(string $title, string $active): void
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section">Menu</div>
-    <a href="index.php" class="nav-link <?= $active === 'dashboard'    ? 'active' : '' ?>">
+    <a href="/admin" class="nav-link <?= $active === 'dashboard'    ? 'active' : '' ?>">
       <span class="icon">📊</span> Dashboard
       <?php if ($total_new > 0): ?><span class="nav-badge"><?= $total_new ?></span><?php endif; ?>
     </a>
-    <a href="connections.php" class="nav-link <?= $active === 'connections' ? 'active' : '' ?>">
+    <a href="/admin/connections" class="nav-link <?= $active === 'connections' ? 'active' : '' ?>">
       <span class="icon">🔌</span> Connections
       <?php if ($nc > 0): ?><span class="nav-badge"><?= $nc ?></span><?php endif; ?>
     </a>
-    <a href="quotes.php" class="nav-link <?= $active === 'quotes' ? 'active' : '' ?>">
+    <a href="/admin/quotes" class="nav-link <?= $active === 'quotes' ? 'active' : '' ?>">
       <span class="icon">💻</span> Shomoysoft Quotes
       <?php if ($nq > 0): ?><span class="nav-badge"><?= $nq ?></span><?php endif; ?>
     </a>
     <div class="nav-section" style="margin-top:1.25rem;">Account</div>
-    <a href="logout.php" class="nav-link">
+    <a href="/admin/logout" class="nav-link">
       <span class="icon">🚪</span> Logout
     </a>
   </nav>

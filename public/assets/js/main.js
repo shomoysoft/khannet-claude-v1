@@ -259,7 +259,7 @@ if (navToggle && navDrawer) {
     submitBtn.textContent = 'Sending…';
 
     try {
-      const res  = await fetch('api/submit.php', {
+      const res  = await fetch('/api/submit', {
         method: 'POST',
         body:   new FormData(form),
       });

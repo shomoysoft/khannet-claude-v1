@@ -40,7 +40,7 @@
   <div class="card">
     <div class="card-head">
       <div class="card-head-title">🔌 Recent Connection Requests</div>
-      <a href="connections.php" class="card-head-link">View all →</a>
+      <a href="/admin/connections" class="card-head-link">View all →</a>
     </div>
     <?php if ($recent_cr): ?>
     <ul class="mini-list">
@@ -65,7 +65,7 @@
   <div class="card">
     <div class="card-head">
       <div class="card-head-title">💻 Recent Shomoysoft Quotes</div>
-      <a href="quotes.php" class="card-head-link">View all →</a>
+      <a href="/admin/quotes" class="card-head-link">View all →</a>
     </div>
     <?php if ($recent_sq): ?>
     <ul class="mini-list">

@@ -11,19 +11,19 @@
     </div>
     <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
       <form method="GET" class="filter-row">
-        <input type="text" name="search" placeholder="Name or mobile…" value="<?= e($search) ?>">
+        <input type="text" name="search" placeholder="Name, mobile or area…" value="<?= e($search) ?>">
         <select name="status">
           <option value="">All statuses</option>
-          <?php foreach (['new','contacted','connected','cancelled'] as $s): ?>
+          <?php foreach (\KhanNet\Models\ConnectionRequest::STATUSES as $s): ?>
           <option value="<?= $s ?>" <?= $status === $s ? 'selected' : '' ?>><?= ucfirst($s) ?></option>
           <?php endforeach; ?>
         </select>
         <button type="submit" class="btn btn-outline btn-sm">Filter</button>
         <?php if ($search || $status): ?>
-        <a href="connections.php" class="btn btn-outline btn-sm">Clear</a>
+        <a href="/admin/connections" class="btn btn-outline btn-sm">Clear</a>
         <?php endif; ?>
       </form>
-      <a href="export.php?type=connections" class="btn btn-outline btn-sm">⬇ CSV</a>
+      <a href="/admin/connections/export" class="btn btn-outline btn-sm">⬇ CSV</a>
     </div>
   </div>
 
@@ -59,12 +59,11 @@
               <div><div class="detail-label">Received</div><div class="detail-val"><?= date('d M Y, H:i', strtotime($r['created_at'])) ?></div></div>
               <div><div class="detail-label">IP</div><div class="detail-val"><?= e($r['ip'] ?: '—') ?></div></div>
             </div>
-            <form method="POST" action="update-status.php" class="action-row">
+            <form method="POST" action="/admin/connections" class="action-row">
               <?= csrf_field() ?>
-              <input type="hidden" name="type"  value="connection">
-              <input type="hidden" name="id"    value="<?= (int)$r['id'] ?>">
+              <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
               <select name="status" class="status-sel">
-                <?php foreach (['new','contacted','connected','cancelled'] as $s): ?>
+                <?php foreach (\KhanNet\Models\ConnectionRequest::STATUSES as $s): ?>
                 <option value="<?= $s ?>" <?= $r['status']===$s ? 'selected':'' ?>><?= ucfirst($s) ?></option>
                 <?php endforeach; ?>
               </select>
@@ -84,7 +83,7 @@
     <?php for ($p = 1; $p <= $pages; $p++): ?>
     <?php $q = http_build_query(['status' => $status, 'search' => $search, 'page' => $p]); ?>
     <?php if ($p === $page): ?><span class="cur"><?= $p ?></span>
-    <?php else: ?><a href="connections.php?<?= $q ?>"><?= $p ?></a><?php endif; ?>
+    <?php else: ?><a href="/admin/connections?<?= $q ?>"><?= $p ?></a><?php endif; ?>
     <?php endfor; ?>
   </div>
   <?php endif; ?>

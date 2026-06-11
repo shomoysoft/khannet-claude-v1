@@ -86,10 +86,22 @@ if (!function_exists('csrf_field')) {
 }
 
 /**
+ * Get a Response instance for fluent response building.
+ *
+ * Usage:
+ *   return response()->json(['key' => 'value']);
+ *   return response()->json(['success' => false, 'message' => '...'], 422);
+ *   return response()->success(['id' => 1]);
+ *   return response()->error('Not found', 404);
+ */
+if (!function_exists('response')) {
+    function response(): \App\Http\Response {
+        return new \App\Http\Response();
+    }
+}
+
+/**
  * Redirect to URL
- * 
- * @param string $url
- * @return void
  */
 if (!function_exists('redirect')) {
     function redirect($url) {

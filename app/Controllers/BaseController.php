@@ -2,9 +2,11 @@
 
 namespace KhanNet\Controllers;
 
-abstract class BaseController
+use App\Http\Controller;
+
+abstract class BaseController extends Controller
 {
-    protected function requireAuth(): void
+    public function __construct()
     {
         require_once APP . '/auth.php';
     }

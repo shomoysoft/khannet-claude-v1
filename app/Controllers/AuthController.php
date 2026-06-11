@@ -2,25 +2,28 @@
 
 namespace KhanNet\Controllers;
 
-class AuthController extends BaseController
+use App\Http\Controller;
+use App\Http\Request;
+
+class AuthController extends Controller
 {
-    public function login(): void
+    public function login(Request $request): void
     {
         if (session()->get('kn_admin_logged_in')) {
-            redirect('index.php');
+            redirect('/admin');
         }
 
-        if (is_post()) {
-            if (!csrf()->verify(input('csrf_token', ''))) {
+        if ($request->isPost()) {
+            if (!csrf()->verify($request->input('csrf_token', ''))) {
                 flash('error', 'Invalid security token. Please try again.');
             } elseif (
-                hash_equals(ADMIN_USER, (string) input('username', '')) &&
-                hash_equals(ADMIN_PASS, (string) input('password', ''))
+                hash_equals(ADMIN_USER, (string) $request->input('username', '')) &&
+                hash_equals(ADMIN_PASS, (string) $request->input('password', ''))
             ) {
                 session()->regenerate(true);
                 session()->set('kn_admin_logged_in', true);
                 session()->set('kn_last_activity', time());
-                redirect('index.php');
+                redirect('/admin');
             } else {
                 flash('error', 'Incorrect username or password.');
             }
@@ -32,6 +35,6 @@ class AuthController extends BaseController
     public function logout(): void
     {
         session()->destroy();
-        redirect('login.php');
+        redirect('/admin/login');
     }
 }
