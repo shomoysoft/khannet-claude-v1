@@ -61,7 +61,7 @@ INSERT IGNORE INTO `users` (`name`, `username`, `password`, `role`, `is_active`)
 VALUES (
   'Administrator',
   'admin',
-  '$2y$12$REPLACE_THIS_WITH_A_REAL_BCRYPT_HASH',
+  '$2y$12$quy5Tu.t68lh38fhmFI9OOZw0Ne4wInRn8Q2h5R2z8BjkYgrYbhmG',
   'super_admin',
   1
 );
