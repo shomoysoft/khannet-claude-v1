@@ -1,9 +1,9 @@
 <?php
 
-namespace KhanNet\Models;
+namespace App\Models;
 
-use App\Database\DB;
-use App\Database\Model;
+use Framework\Database\DB;
+use Framework\Database\Model;
 
 class Quote extends Model
 {

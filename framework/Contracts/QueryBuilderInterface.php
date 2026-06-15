@@ -1,5 +1,5 @@
 <?php
-namespace App\Contracts;
+namespace Framework\Contracts;
 
 interface QueryBuilderInterface {
     public function table(string $table): self;

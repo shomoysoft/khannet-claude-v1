@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controllers;
+namespace Framework\Controllers;
 
-use App\Mail\PHPMailerMailer;
-use App\Mail\SendGridMailer;
-use App\Mail\WelcomeMail;
-use App\Models\User;
+use Framework\Mail\PHPMailerMailer;
+use Framework\Mail\SendGridMailer;
+use Framework\Mail\WelcomeMail;
+use Framework\Models\User;
 
 class AuthController
 {

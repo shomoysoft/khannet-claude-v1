@@ -1,8 +1,8 @@
 <?php
 
-namespace KhanNet\Controllers;
+namespace App\Controllers;
 
-use App\Http\Controller;
+use Framework\Http\Controller;
 
 abstract class BaseController extends Controller
 {

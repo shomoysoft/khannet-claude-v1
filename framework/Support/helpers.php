@@ -3,33 +3,33 @@
 /**
  * Get session instance
  * 
- * @return \App\Contracts\SessionInterface
+ * @return \Framework\Contracts\SessionInterface
  */
 if (!function_exists('session')) {
     function session() {
-        return App\Container\Container::make(App\Contracts\SessionInterface::class);
+        return Framework\Container\Container::make(Framework\Contracts\SessionInterface::class);
     }
 }
 
 /**
  * Get auth instance
  * 
- * @return \App\Contracts\AuthInterface
+ * @return \Framework\Contracts\AuthInterface
  */
 if (!function_exists('auth')) {
     function auth() {
-        return App\Container\Container::make(App\Contracts\AuthInterface::class);
+        return Framework\Container\Container::make(Framework\Contracts\AuthInterface::class);
     }
 }
 
 /**
  * Get CSRF instance
  * 
- * @return \App\Security\Csrf
+ * @return \Framework\Security\Csrf
  */
 if (!function_exists('csrf')) {
     function csrf() {
-        return App\Container\Container::make(App\Security\Csrf::class);
+        return Framework\Container\Container::make(Framework\Security\Csrf::class);
     }
 }
 
@@ -95,8 +95,8 @@ if (!function_exists('csrf_field')) {
  *   return response()->error('Not found', 404);
  */
 if (!function_exists('response')) {
-    function response(): \App\Http\Response {
-        return new \App\Http\Response();
+    function response(): \Framework\Http\Response {
+        return new \Framework\Http\Response();
     }
 }
 
@@ -229,7 +229,7 @@ if (!function_exists('env')) {
      * @return mixed
      */
     function env($key, $default = null) {
-        return \App\Support\Env::get($key, $default);
+        return \Framework\Support\Env::get($key, $default);
     }
 }
 

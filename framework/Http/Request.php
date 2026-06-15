@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http;
+namespace Framework\Http;
 
 class Request
 {
@@ -151,7 +151,7 @@ class Request
             $nullable = in_array('nullable', $list, true);
 
             if ($nullable && ($value === null || $value === '')) {
-                $this->validatedData[$field] = $value;
+                $this->validatedData[$field] = $value ?? '';
                 continue;
             }
 
@@ -208,22 +208,22 @@ class Request
 
     private function checkMin(string $label, mixed $value, int $n): ?string
     {
+        if (is_string($value)) {
+            return mb_strlen($value) < $n ? "{$label} must be at least {$n} characters." : null;
+        }
         if (is_numeric($value) && (float) $value < $n) {
             return "{$label} must be at least {$n}.";
-        }
-        if (is_string($value) && mb_strlen($value) < $n) {
-            return "{$label} must be at least {$n} characters.";
         }
         return null;
     }
 
     private function checkMax(string $label, mixed $value, int $n): ?string
     {
+        if (is_string($value)) {
+            return mb_strlen($value) > $n ? "{$label} must be no more than {$n} characters." : null;
+        }
         if (is_numeric($value) && (float) $value > $n) {
             return "{$label} must be no more than {$n}.";
-        }
-        if (is_string($value) && mb_strlen($value) > $n) {
-            return "{$label} must be no more than {$n} characters.";
         }
         return null;
     }

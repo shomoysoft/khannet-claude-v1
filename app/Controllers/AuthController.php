@@ -1,9 +1,9 @@
 <?php
 
-namespace KhanNet\Controllers;
+namespace App\Controllers;
 
-use App\Http\Controller;
-use App\Http\Request;
+use Framework\Http\Controller;
+use Framework\Http\Request;
 
 class AuthController extends Controller
 {

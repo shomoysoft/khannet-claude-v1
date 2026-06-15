@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Auth;
+namespace Framework\Auth;
 
-use App\Contracts\AuthInterface;
-use App\Contracts\SessionInterface;
-use App\Models\User;
+use Framework\Contracts\AuthInterface;
+use Framework\Contracts\SessionInterface;
+use Framework\Models\User;
 
 class SessionAuth implements AuthInterface
 {

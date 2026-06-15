@@ -1,5 +1,5 @@
 <?php
-namespace App\Contracts;
+namespace Framework\Contracts;
 
 interface SessionInterface {
     public function start(): void;

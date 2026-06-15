@@ -11,9 +11,9 @@ class ComposerStaticInite03824eff2057ee12ad04551d2683b14
     );
 
     public static $prefixLengthsPsr4 = array (
-        'K' => 
+        'F' => 
         array (
-            'KhanNet\\' => 8,
+            'Framework\\' => 10,
         ),
         'A' => 
         array (
@@ -22,13 +22,13 @@ class ComposerStaticInite03824eff2057ee12ad04551d2683b14
     );
 
     public static $prefixDirsPsr4 = array (
-        'KhanNet\\' => 
+        'Framework\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/app',
+            0 => __DIR__ . '/../..' . '/framework',
         ),
         'App\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/framework',
+            0 => __DIR__ . '/../..' . '/app',
         ),
     );
 

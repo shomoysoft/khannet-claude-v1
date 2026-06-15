@@ -1,9 +1,9 @@
 <?php
 
-namespace KhanNet\Controllers;
+namespace App\Controllers;
 
-use KhanNet\Models\ConnectionRequest;
-use KhanNet\Models\Quote;
+use App\Models\ConnectionRequest;
+use App\Models\Quote;
 
 class DashboardController extends BaseController
 {

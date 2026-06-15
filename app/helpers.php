@@ -1,6 +1,6 @@
 <?php
 
-use App\Database\DB;
+use Framework\Database\DB;
 
 function status_badge(string $status): string {
     $map = [

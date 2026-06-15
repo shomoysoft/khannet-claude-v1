@@ -467,14 +467,42 @@
     ].join('\n'));
   }
 
-  form.addEventListener('input', () => {
+  function fieldError(name, msg) {
+    const el = form.querySelector('[name="' + name + '"]');
+    if (!el) return;
+    let err = el.parentElement.querySelector('.field-error');
+    if (!err) {
+      err = document.createElement('span');
+      err.className = 'field-error';
+      err.setAttribute('role', 'alert');
+      el.after(err);
+    }
+    err.textContent = msg;
+    el.classList.add('is-invalid');
+  }
+
+  function clearErrors() {
+    form.querySelectorAll('.field-error').forEach(function(el) { el.textContent = ''; });
+    form.querySelectorAll('.is-invalid').forEach(function(el) { el.classList.remove('is-invalid'); });
+  }
+
+  function val(name) {
+    return (form.querySelector('[name="' + name + '"]')?.value || '').trim();
+  }
+
+  form.addEventListener('input',  function(e) {
+    if (!e.target.name) return;
+    const err = e.target.parentElement.querySelector('.field-error');
+    if (err) err.textContent = '';
+    e.target.classList.remove('is-invalid');
     waBtn.href = `https://wa.me/${SITE.whatsapp}?text=${buildWAMsg()}`;
   });
 
-  waBtn.addEventListener('click', e => {
-    if (!form.querySelector('[name=name]')?.value?.trim()) {
+  waBtn.addEventListener('click', function(e) {
+    clearErrors();
+    if (!val('name')) {
       e.preventDefault();
-      alert('Please fill in your name before using WhatsApp.');
+      fieldError('name', 'Please enter your name first.');
       return;
     }
     waBtn.href = `https://wa.me/${SITE.whatsapp}?text=${buildWAMsg()}`;
@@ -482,7 +510,13 @@
 
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
-    const btn = form.querySelector('[type=submit]');
+    clearErrors();
+    let ok = true;
+    if (!val('name'))   { fieldError('name',   'Please enter your full name.');     ok = false; }
+    if (!val('mobile')) { fieldError('mobile', 'Please enter your mobile number.'); ok = false; }
+    if (!ok) return;
+
+    const btn  = form.querySelector('[type=submit]');
     const orig = btn.textContent;
     btn.disabled = true; btn.textContent = 'Sending…';
 
@@ -492,9 +526,12 @@
       if (json.success) {
         form.style.display = 'none';
         successMsg.classList.add('show');
-      } else { throw new Error(json.message); }
+      } else {
+        showToast(json.message || 'Submission failed. Please try again.', 'error');
+        btn.disabled = false; btn.textContent = orig;
+      }
     } catch(err) {
-      alert('Could not send: ' + err.message + '\nPlease use WhatsApp instead.');
+      showToast('Could not send your request. Please use WhatsApp instead.', 'error');
       btn.disabled = false; btn.textContent = orig;
     }
   });

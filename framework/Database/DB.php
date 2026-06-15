@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Database;
+namespace Framework\Database;
 
-use App\Contracts\QueryBuilderInterface;
+use Framework\Contracts\QueryBuilderInterface;
 
 class DB {
     public static function table(string $table): QueryBuilderInterface {

@@ -14,7 +14,7 @@
         <input type="text" name="search" placeholder="Name, mobile or area…" value="<?= e($search) ?>">
         <select name="status">
           <option value="">All statuses</option>
-          <?php foreach (\KhanNet\Models\ConnectionRequest::STATUSES as $s): ?>
+          <?php foreach (\App\Models\ConnectionRequest::STATUSES as $s): ?>
           <option value="<?= $s ?>" <?= $status === $s ? 'selected' : '' ?>><?= ucfirst($s) ?></option>
           <?php endforeach; ?>
         </select>
@@ -63,7 +63,7 @@
               <?= csrf_field() ?>
               <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
               <select name="status" class="status-sel">
-                <?php foreach (\KhanNet\Models\ConnectionRequest::STATUSES as $s): ?>
+                <?php foreach (\App\Models\ConnectionRequest::STATUSES as $s): ?>
                 <option value="<?= $s ?>" <?= $r['status']===$s ? 'selected':'' ?>><?= ucfirst($s) ?></option>
                 <?php endforeach; ?>
               </select>

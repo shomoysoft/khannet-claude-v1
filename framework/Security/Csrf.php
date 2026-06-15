@@ -1,7 +1,7 @@
 <?php
-namespace App\Security;
+namespace Framework\Security;
 
-use App\Contracts\SessionInterface;
+use Framework\Contracts\SessionInterface;
 
 class Csrf {
     

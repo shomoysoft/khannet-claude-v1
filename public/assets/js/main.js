@@ -3,6 +3,55 @@
    Reads business data from js/config.js (SITE object)
    ============================================================ */
 
+/* ── Toast notifications ─────────────────────────────────────
+   Usage: showToast('message', 'error'|'warning'|'info'|'success')
+   Available globally so inline scripts can call it too.
+─────────────────────────────────────────────────────────── */
+(function() {
+  const ICONS  = { error: '❌', warning: '⚠️', info: 'ℹ️', success: '✅' };
+  const TITLES = { error: 'Error', warning: 'Warning', info: 'Notice', success: 'Success' };
+  let container = null;
+
+  function getContainer() {
+    if (!container) {
+      container = document.createElement('div');
+      container.className = 'toast-container';
+      document.body.appendChild(container);
+    }
+    return container;
+  }
+
+  window.showToast = function(message, type, duration) {
+    type     = type     || 'error';
+    duration = duration === undefined ? 6000 : duration;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+    toast.innerHTML =
+      '<span class="toast-icon">' + (ICONS[type] || ICONS.error) + '</span>' +
+      '<div class="toast-body">' +
+        '<div class="toast-title">' + (TITLES[type] || 'Notice') + '</div>' +
+        '<div>' + message + '</div>' +
+      '</div>' +
+      '<button class="toast-close" aria-label="Dismiss">×</button>';
+
+    var timer;
+    function dismiss() {
+      clearTimeout(timer);
+      toast.classList.remove('show');
+      toast.addEventListener('transitionend', function() { toast.remove(); }, { once: true });
+    }
+
+    toast.querySelector('.toast-close').addEventListener('click', dismiss);
+    if (duration > 0) timer = setTimeout(dismiss, duration);
+
+    getContainer().appendChild(toast);
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() { toast.classList.add('show'); });
+    });
+  };
+})();
+
 /* ── Apply config to DOM ─────────────────────────────────────
    Runs once on page load.
    1. Auto-patches all tel:, wa.me, mailto: hrefs
@@ -212,7 +261,7 @@ if (navToggle && navDrawer) {
   });
 })();
 
-/* ── Connection Request Form (Web3Forms + WhatsApp) ── */
+/* ── Connection Request Form ── */
 (function initConnectionForm() {
   const form       = document.getElementById('connection-form');
   const successMsg = document.getElementById('form-success');
@@ -233,46 +282,88 @@ if (navToggle && navDrawer) {
     return encodeURIComponent(msg);
   }
 
-  if (waBtn) {
-    form.addEventListener('input', () => {
-      waBtn.href = `https://wa.me/${SITE.whatsapp}?text=${buildWhatsAppMessage()}`;
-    });
+  function fieldError(name, msg) {
+    const el = form.querySelector('[name="' + name + '"]');
+    if (!el) return;
+    let err = el.parentElement.querySelector('.field-error');
+    if (!err) {
+      err = document.createElement('span');
+      err.className = 'field-error';
+      err.setAttribute('role', 'alert');
+      el.after(err);
+    }
+    err.textContent = msg;
+    el.classList.add('is-invalid');
+  }
 
-    waBtn.addEventListener('click', (e) => {
-      const name   = form.querySelector('[name=name]')?.value?.trim();
-      const mobile = form.querySelector('[name=mobile]')?.value?.trim();
-      if (!name || !mobile) {
-        e.preventDefault();
-        alert('Please fill in at least your name and mobile number before using WhatsApp.');
-        return;
-      }
-      waBtn.href = `https://wa.me/${SITE.whatsapp}?text=${buildWhatsAppMessage()}`;
+  function clearErrors() {
+    form.querySelectorAll('.field-error').forEach(function(el) { el.textContent = ''; });
+    form.querySelectorAll('.is-invalid').forEach(function(el) { el.classList.remove('is-invalid'); });
+  }
+
+  function val(name) {
+    return (form.querySelector('[name="' + name + '"]')?.value || '').trim();
+  }
+
+  function validate() {
+    clearErrors();
+    let ok = true;
+    if (!val('name'))    { fieldError('name',    'Please enter your full name.');     ok = false; }
+    if (!val('mobile'))  { fieldError('mobile',  'Please enter your mobile number.'); ok = false; }
+    if (!val('area'))    { fieldError('area',    'Please select your area.');         ok = false; }
+    if (!val('address')) { fieldError('address', 'Please enter your full address.');  ok = false; }
+    return ok;
+  }
+
+  // Clear field error when user corrects it
+  form.addEventListener('input',  function(e) { clearFieldOn(e.target); updateWA(); });
+  form.addEventListener('change', function(e) { clearFieldOn(e.target); updateWA(); });
+
+  function clearFieldOn(el) {
+    if (!el.name) return;
+    const err = el.parentElement.querySelector('.field-error');
+    if (err) err.textContent = '';
+    el.classList.remove('is-invalid');
+  }
+
+  function updateWA() {
+    if (waBtn) waBtn.href = `https://wa.me/${SITE.whatsapp}?text=${buildWhatsAppMessage()}`;
+  }
+
+  if (waBtn) {
+    waBtn.addEventListener('click', function(e) {
+      clearErrors();
+      let ok = true;
+      if (!val('name'))   { fieldError('name',   'Please enter your name first.');          ok = false; }
+      if (!val('mobile')) { fieldError('mobile', 'Please enter your mobile number first.'); ok = false; }
+      if (!ok) { e.preventDefault(); return; }
+      updateWA();
     });
   }
 
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
+    if (!validate()) return;
 
-    const submitBtn     = form.querySelector('[type=submit]');
-    const originalText  = submitBtn.textContent;
+    const submitBtn    = form.querySelector('[type=submit]');
+    const originalText = submitBtn.textContent;
     submitBtn.disabled    = true;
     submitBtn.textContent = 'Sending…';
 
     try {
-      const res  = await fetch('/api/submit', {
-        method: 'POST',
-        body:   new FormData(form),
-      });
+      const res  = await fetch('/api/submit', { method: 'POST', body: new FormData(form) });
       const json = await res.json();
 
       if (json.success) {
         form.style.display = 'none';
         successMsg.classList.add('show');
       } else {
-        throw new Error(json.message || 'Submission failed');
+        showToast(json.message || 'Submission failed. Please try again.', 'error');
+        submitBtn.disabled    = false;
+        submitBtn.textContent = originalText;
       }
     } catch (err) {
-      alert('Could not send your request: ' + err.message + '\n\nPlease use WhatsApp instead.');
+      showToast('Could not send your request. Please use WhatsApp instead.', 'error');
       submitBtn.disabled    = false;
       submitBtn.textContent = originalText;
     }

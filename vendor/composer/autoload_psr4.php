@@ -6,6 +6,6 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'KhanNet\\' => array($baseDir . '/app'),
-    'App\\' => array($baseDir . '/framework'),
+    'Framework\\' => array($baseDir . '/framework'),
+    'App\\' => array($baseDir . '/app'),
 );

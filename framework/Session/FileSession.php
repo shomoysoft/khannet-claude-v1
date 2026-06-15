@@ -1,7 +1,7 @@
 <?php
-namespace App\Session;
+namespace Framework\Session;
 
-use App\Contracts\SessionInterface;
+use Framework\Contracts\SessionInterface;
 
 class FileSession implements SessionInterface {
     

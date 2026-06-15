@@ -1,40 +1,71 @@
 <?php
 
-namespace App\Support;
+namespace Framework\Support;
 
 class Logger
 {
-    private static $logFile;
+    private static string $path;
 
-    public static function init()
+    public static function init(): void
     {
-        self::$logFile = ROOT_PATH . 'storage/logs/app.log';
+        self::$path = ROOT . '/storage/logs/app.log';
 
-        // Create directory if not exists
-        $dir = dirname(self::$logFile);
-        if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
+        if (!is_dir(dirname(self::$path))) {
+            mkdir(dirname(self::$path), 0755, true);
         }
 
-        // Set error handler
-        set_error_handler([self::class, 'handleError']);
-        set_exception_handler([self::class, 'handleException']);
+        set_exception_handler([static::class, 'handleException']);
     }
 
-    public static function handleError($level, $message, $file, $line)
+    public static function handleException(\Throwable $e): void
     {
-        self::log("ERROR: $message in $file:$line");
+        self::exception($e, 'Uncaught ' . get_class($e));
+        http_response_code(500);
+        echo '500 — Internal Server Error';
+        exit;
     }
 
-    public static function handleException($exception)
+    public static function info(string $message, array $context = []): void
     {
-        self::log("EXCEPTION: " . $exception->getMessage() . " in " .
-            $exception->getFile() . ":" . $exception->getLine());
+        self::write('INFO', $message, $context);
     }
 
-    public static function log($message)
+    public static function warning(string $message, array $context = []): void
     {
-        $timestamp = date('Y-m-d H:i:s');
-        file_put_contents(self::$logFile, "[$timestamp] $message\n", FILE_APPEND);
+        self::write('WARNING', $message, $context);
+    }
+
+    public static function error(string $message, array $context = []): void
+    {
+        self::write('ERROR', $message, $context);
+    }
+
+    public static function exception(\Throwable $e, string $message = ''): void
+    {
+        self::error($message ?: $e->getMessage(), [
+            'exception' => get_class($e),
+            'file'      => $e->getFile() . ':' . $e->getLine(),
+            'trace'     => $e->getTraceAsString(),
+        ]);
+    }
+
+    private static function write(string $level, string $message, array $context): void
+    {
+        if (!isset(self::$path)) return;
+
+        $pad  = str_repeat(' ', 11);
+        $line = sprintf('[%s] %s: %s', date('Y-m-d H:i:s'), $level, $message);
+
+        foreach ($context as $key => $value) {
+            $line .= PHP_EOL . $pad . "{$key}: " . $value;
+        }
+
+        if (PHP_SAPI !== 'cli' && isset($_SERVER['REQUEST_METHOD'])) {
+            $line .= PHP_EOL . $pad . 'request: '
+                  . $_SERVER['REQUEST_METHOD'] . ' '
+                  . ($_SERVER['REQUEST_URI'] ?? '');
+        }
+
+        file_put_contents(self::$path, $line . PHP_EOL, FILE_APPEND | LOCK_EX);
     }
 }

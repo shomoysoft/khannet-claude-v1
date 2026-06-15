@@ -1,9 +1,10 @@
 <?php
 
-namespace KhanNet\Controllers\Api;
+namespace App\Controllers\Api;
 
-use App\Http\Request;
-use KhanNet\Models\ConnectionRequest;
+use Framework\Http\Request;
+use Framework\Support\Logger;
+use App\Models\ConnectionRequest;
 
 class ConnectionApiController extends ApiController
 {
@@ -34,7 +35,8 @@ class ConnectionApiController extends ApiController
 
             $id = ConnectionRequest::create($data);
             response()->json(['success' => true, 'id' => $id]);
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            Logger::exception($e, 'Connection request save failed');
             response()->error('Could not save your request. Please try WhatsApp.', 500);
         }
     }

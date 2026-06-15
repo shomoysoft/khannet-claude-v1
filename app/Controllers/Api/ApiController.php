@@ -1,8 +1,8 @@
 <?php
 
-namespace KhanNet\Controllers\Api;
+namespace App\Controllers\Api;
 
-use App\Http\Controller;
+use Framework\Http\Controller;
 
 abstract class ApiController extends Controller
 {

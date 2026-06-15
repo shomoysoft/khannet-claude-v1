@@ -1,9 +1,10 @@
 <?php
 
-namespace KhanNet\Controllers\Api;
+namespace App\Controllers\Api;
 
-use App\Http\Request;
-use KhanNet\Models\Quote;
+use Framework\Http\Request;
+use Framework\Support\Logger;
+use App\Models\Quote;
 
 class QuoteApiController extends ApiController
 {
@@ -33,7 +34,8 @@ class QuoteApiController extends ApiController
 
             $id = Quote::create($data);
             response()->json(['success' => true, 'id' => $id]);
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            Logger::exception($e, 'Quote save failed');
             response()->error('Could not save your request. Please try WhatsApp.', 500);
         }
     }

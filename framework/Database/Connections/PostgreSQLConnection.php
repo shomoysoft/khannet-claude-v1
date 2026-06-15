@@ -1,7 +1,7 @@
 <?php
-namespace App\Database\Connections;
+namespace Framework\Database\Connections;
 
-use App\Contracts\ConnectionInterface;
+use Framework\Contracts\ConnectionInterface;
 use PDO;
 
 class PostgreSQLConnection implements ConnectionInterface {

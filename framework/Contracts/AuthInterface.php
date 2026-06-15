@@ -1,5 +1,5 @@
 <?php
-namespace App\Contracts;
+namespace Framework\Contracts;
 
 interface AuthInterface {
     public function check(): bool;

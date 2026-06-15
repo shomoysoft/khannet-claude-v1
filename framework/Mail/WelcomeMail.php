@@ -1,8 +1,8 @@
 <?php
 
-namespace   App\Mail;
+namespace Framework\Mail;
 
-use App\Contracts\MailerInterface;
+use Framework\Contracts\MailerInterface;
 
 class WelcomeMail{
     private $data;

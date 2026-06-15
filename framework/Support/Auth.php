@@ -1,7 +1,7 @@
 <?php
-namespace App\Support;
+namespace Framework\Support;
 
-use App\Models\User;
+use Framework\Models\User;
 
 class Auth {
     

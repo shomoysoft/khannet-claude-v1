@@ -1,8 +1,8 @@
 <?php
-namespace App\Database;
+namespace Framework\Database;
 
-use App\Contracts\ConnectionInterface;
-use App\Contracts\QueryBuilderInterface;
+use Framework\Contracts\ConnectionInterface;
+use Framework\Contracts\QueryBuilderInterface;
 
 class ConnectionManager {
     

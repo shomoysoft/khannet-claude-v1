@@ -1,10 +1,10 @@
 <?php
 
-namespace KhanNet\Controllers;
+namespace App\Controllers;
 
-use App\Database\DB;
-use App\Http\Request;
-use KhanNet\Models\ConnectionRequest;
+use Framework\Database\DB;
+use Framework\Http\Request;
+use App\Models\ConnectionRequest;
 
 class ConnectionController extends BaseController
 {

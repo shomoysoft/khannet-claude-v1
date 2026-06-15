@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace Framework\Controllers;
 
 class SettingController
 {
