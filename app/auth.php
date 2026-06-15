@@ -1,13 +1,11 @@
 <?php
 
-require_once APP . '/bootstrap.php';
-
-if (!session()->get('kn_admin_logged_in')) {
+if (!auth()->check()) {
     redirect('/admin/login');
 }
 
 if ((time() - (int) session()->get('kn_last_activity', 0)) > 3600) {
-    session()->destroy();
+    auth()->logout();
     redirect('/admin/login?expired=1');
 }
 

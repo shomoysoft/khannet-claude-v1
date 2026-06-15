@@ -4,12 +4,11 @@ namespace Framework\Auth;
 
 use Framework\Contracts\AuthInterface;
 use Framework\Contracts\SessionInterface;
-use Framework\Models\User;
+use App\Models\User;
 
 class SessionAuth implements AuthInterface
 {
-
-    private $session;
+    private SessionInterface $session;
 
     public function __construct(SessionInterface $session)
     {
@@ -28,7 +27,8 @@ class SessionAuth implements AuthInterface
 
     public function id(): ?int
     {
-        return $this->session->get('user_id');
+        $id = $this->session->get('user_id');
+        return $id !== null ? (int) $id : null;
     }
 
     public function user(): ?object
@@ -36,18 +36,15 @@ class SessionAuth implements AuthInterface
         if (!$this->check()) {
             return null;
         }
-
         return User::find($this->id());
     }
 
     public function login(object $user, bool $remember = false): bool
     {
         $this->session->regenerate();
-
-        $this->session->set('user_id', $user->id);
+        $this->session->set('user_id',   $user->id);
+        $this->session->set('user_role', $user->role);
         $this->session->set('user_name', $user->name);
-        $this->session->set('user_email', $user->email);
-
         return true;
     }
 
@@ -58,55 +55,19 @@ class SessionAuth implements AuthInterface
 
     public function attempt(array $credentials, bool $remember = false): bool
     {
-        if(!$field = $this->check_username_or_email($credentials['username'])){
+        $username = trim($credentials['username'] ?? '');
+        $password = $credentials['password'] ?? '';
+
+        if ($username === '' || $password === '') {
             return false;
         }
 
-        $username = $credentials['username'] ?? null;
-        $password = $credentials['password'] ?? null;
+        $user = User::findByUsername($username);
 
-        if (!$username || !$password) {
-            return false;
-        }
-
-        $user = User::first('username', $username);
-
-        if (!$user || !password_verify($password, $user->password)) {
+        if (!$user || !(bool) $user->is_active || !password_verify($password, $user->password)) {
             return false;
         }
 
         return $this->login($user, $remember);
-    }
-
-    /**
-     * Check if a string is a valid email
-     */
-    public function is_valid_email($value)
-    {
-        return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
-    }
-
-    /**
-     * Check if a string is a valid username
-     * Rules: 3-20 chars, letters, numbers, underscore
-     */
-    public function is_valid_username($value)
-    {
-        return preg_match('/^[A-Za-z0-9_]{3,20}$/', $value);
-    }
-
-    /**
-     * Check whether input is username or email
-     * Returns 'email', 'username', or false if invalid
-     */
-    public function check_username_or_email($value)
-    {
-        if ($this->is_valid_email($value)) {
-            return 'email';
-        } elseif ($this->is_valid_username($value)) {
-            return 'username';
-        } else {
-            return false;
-        }
     }
 }

@@ -2,9 +2,11 @@
 
 function layout_start(string $title, string $active): void
 {
-    $nc = new_count('connection_requests');
-    $nq = new_count('shomoysoft_quotes');
+    $nc        = new_count('connection_requests');
+    $nq        = new_count('shomoysoft_quotes');
     $total_new = $nc + $nq;
+    $userRole  = session()->get('user_role', '');
+    $userName  = session()->get('user_name', 'Admin');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,6 +39,12 @@ function layout_start(string $title, string $active): void
       <span class="icon">💻</span> Shomoysoft Quotes
       <?php if ($nq > 0): ?><span class="nav-badge"><?= $nq ?></span><?php endif; ?>
     </a>
+    <?php if ($userRole === 'super_admin'): ?>
+    <div class="nav-section" style="margin-top:1.25rem;">Management</div>
+    <a href="/admin/users" class="nav-link <?= $active === 'users' ? 'active' : '' ?>">
+      <span class="icon">👥</span> Users
+    </a>
+    <?php endif; ?>
     <div class="nav-section" style="margin-top:1.25rem;">Account</div>
     <a href="/admin/logout" class="nav-link">
       <span class="icon">🚪</span> Logout
@@ -48,7 +56,13 @@ function layout_start(string $title, string $active): void
 <main class="main">
   <div class="topbar">
     <div class="topbar-title"><?= e($title) ?></div>
-    <div class="topbar-meta"><?= date('d M Y, H:i') ?></div>
+    <div style="display:flex;align-items:center;gap:1rem">
+      <div class="topbar-meta"><?= date('d M Y, H:i') ?></div>
+      <div style="display:flex;align-items:center;gap:.5rem;font-size:.8rem">
+        <?= role_badge($userRole) ?>
+        <span style="color:var(--muted)"><?= e($userName) ?></span>
+      </div>
+    </div>
   </div>
   <div class="page">
 <?php

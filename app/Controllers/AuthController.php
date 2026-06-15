@@ -9,19 +9,17 @@ class AuthController extends Controller
 {
     public function login(Request $request): void
     {
-        if (session()->get('kn_admin_logged_in')) {
+        if (auth()->check()) {
             redirect('/admin');
         }
 
         if ($request->isPost()) {
             if (!csrf()->verify($request->input('csrf_token', ''))) {
                 flash('error', 'Invalid security token. Please try again.');
-            } elseif (
-                hash_equals(ADMIN_USER, (string) $request->input('username', '')) &&
-                hash_equals(ADMIN_PASS, (string) $request->input('password', ''))
-            ) {
-                session()->regenerate(true);
-                session()->set('kn_admin_logged_in', true);
+            } elseif (auth()->attempt([
+                'username' => $request->input('username', ''),
+                'password' => $request->input('password', ''),
+            ])) {
                 session()->set('kn_last_activity', time());
                 redirect('/admin');
             } else {
@@ -34,7 +32,7 @@ class AuthController extends Controller
 
     public function logout(): void
     {
-        session()->destroy();
+        auth()->logout();
         redirect('/admin/login');
     }
 }

@@ -6,8 +6,10 @@ define('APP',  __DIR__);
 define('ROOT', dirname(__DIR__));
 
 use Framework\Container\Container;
+use Framework\Contracts\AuthInterface;
 use Framework\Contracts\ConnectionInterface;
 use Framework\Contracts\SessionInterface;
+use Framework\Auth\SessionAuth;
 use Framework\Database\Connections\MySQLConnection;
 use Framework\Database\ConnectionManager;
 use Framework\Session\FileSession;
@@ -29,7 +31,8 @@ Container::singleton(ConnectionInterface::class, fn() => new MySQLConnection($db
 ConnectionManager::setConnection(Container::make(ConnectionInterface::class));
 
 Container::singleton(SessionInterface::class, fn() => new FileSession($sesCfg));
-Container::singleton(Csrf::class, fn($c) => new Csrf($c->make(SessionInterface::class)));
+Container::singleton(AuthInterface::class,    fn($c) => new SessionAuth($c->make(SessionInterface::class)));
+Container::singleton(Csrf::class,             fn($c) => new Csrf($c->make(SessionInterface::class)));
 
 Container::make(SessionInterface::class)->start();
 

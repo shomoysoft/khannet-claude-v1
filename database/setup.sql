@@ -37,3 +37,31 @@ CREATE TABLE IF NOT EXISTS `shomoysoft_quotes` (
   KEY `idx_status` (`status`),
   KEY `idx_created` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id`         INT UNSIGNED     NOT NULL AUTO_INCREMENT,
+  `name`       VARCHAR(100)     NOT NULL,
+  `username`   VARCHAR(50)      NOT NULL,
+  `email`      VARCHAR(150)              DEFAULT NULL,
+  `password`   VARCHAR(255)     NOT NULL,
+  `role`       ENUM('super_admin','admin','viewer') NOT NULL DEFAULT 'viewer',
+  `is_active`  TINYINT(1)       NOT NULL DEFAULT 1,
+  `created_at` TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_username` (`username`),
+  KEY `idx_role` (`role`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Seed the first super admin.
+-- Default password: Admin@KhanNet2024
+-- Generate a fresh hash: php -r "echo password_hash('YourPassword', PASSWORD_BCRYPT);"
+-- Replace the hash below before importing on a new server.
+INSERT IGNORE INTO `users` (`name`, `username`, `password`, `role`, `is_active`)
+VALUES (
+  'Administrator',
+  'admin',
+  '$2y$12$REPLACE_THIS_WITH_A_REAL_BCRYPT_HASH',
+  'super_admin',
+  1
+);

@@ -22,6 +22,18 @@ function time_ago(string $datetime): string {
     return date('d M Y', strtotime($datetime));
 }
 
+function role_badge(string $role, bool $active = true): string {
+    if (!$active) {
+        return '<span class="badge badge-inactive">● Inactive</span>';
+    }
+    $map = [
+        'super_admin' => '<span class="badge badge-super-admin">⬟ Super Admin</span>',
+        'admin'       => '<span class="badge badge-admin">● Admin</span>',
+        'viewer'      => '<span class="badge badge-viewer">● Viewer</span>',
+    ];
+    return $map[$role] ?? '<span class="badge">' . e($role) . '</span>';
+}
+
 function new_count(string $table): int {
     try {
         return DB::table($table)->where('status', 'new')->count();
